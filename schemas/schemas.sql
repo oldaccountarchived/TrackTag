@@ -1,0 +1,27 @@
+CREATE TABLE Music
+(artist VARCHAR(200) NOT NULL,
+songID VARCHAR(18) NOT NULL,
+song VARCHAR(200) NOT NULL,
+year INT NOT NULL,
+CONSTRAINT musicKey PRIMARY KEY (songID));
+
+CREATE TABLE Users
+(userName VARCHAR(20) NOT NULL,
+fName VARCHAR(20) NOT NULL,
+lName VARCHAR(20) NOT NULL,
+password VARCHAR(20) NOT NULL,
+joinDate DATE,
+CONSTRAINT userKey PRIMARY KEY (userName));
+
+CREATE TABLE Tags (
+tagName VARCHAR(200) NOT NULL,
+tagColor VARCHAR(7) NOT NULL,
+CONSTRAINT tagKey PRIMARY KEY (tagName));
+
+CREATE TABLE Tagmap (
+tagName  VARCHAR(200) NOT NULL REFERENCES Tags (tagName),
+userName VARCHAR(20) NOT NULL REFERENCES Users (username),
+songID   VARCHAR(18) NOT NULL REFERENCES Music (songID),
+artist   VARCHAR(200),
+dateCreated DATE,
+CONSTRAINT tagMapKey PRIMARY KEY (tagName, userName, songID, artist));

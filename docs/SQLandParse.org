@@ -1,0 +1,74 @@
+* DONE Algorithm
+#+BEGIN_SRC
+for each line : file:
+    sqlout = "INSERT INTO Music VALUES("
+    year = from START, until"<" + ","
+    primkey = from">", until "<" AS string
+    artists = from">", until "<" AS string
+    artistkey = function(artists)
+    title = from">", until END AS string
+
+    sqlout = sqlout + primkey + "," + title + "," + 
+             artistkey + "," + artist + "," + year + ");"
+    
+    OUTPUT_TO_FILE()
+#+END_SRC
+
+** PYTHON!
+#+BEGIN_SRC python
+  SQL_out = 'INSERT INTO Music VALUES('
+  SQL_vals = SQL_in.split('<SEP>')
+
+  # Grab vals from split
+  year    = SQL_vals[0]
+  song_ID = SQL_vals[1]
+  artist  = SQL_vals[2]
+  song    = SQL_vals[3]
+
+  # Passes artist name to function to generate key.
+  artist_ID = toKey(artist)
+
+  SQL_out += (artist_ID + ',' + artist + ',' + song_ID + ',' 
+              + song + ','  + year + ');')
+#+END_SRC
+
+* SQL
+** Artist Search
+*** Without Quotes
+#+BEGIN_SRC sql
+SELECT m.artist 
+FROM music m
+WHERE artist = "%input%"
+#+END_SRC
+
+*** With Quotes
+#+BEGIN_SRC sql
+SELECT m.artist
+FROM music m
+WHERE artist = "input"
+#+END_SRC
+
+** Same for Song Title, Tag, or Year.
+Note: for a general search we should query for the Artist, Song, and Tag and
+display them all possibly listing less rows.
+
+** User Profile
+Note: username at to just checks to see if the user exists in the DB.
+
+We display the users list of tags this way:
+*** List of tags
+#+BEGIN_SRC sql
+SELECT * FROM (
+SELECT DISTINCT t.tag, m.artist, tm.musicID, tm.date 
+FROM user u 
+     JOIN tagmap tm
+         ON u.username = tm.user
+     JOIN music m 
+     -- It could be a songID or an artistID... figure it out later.
+         ON m.songID = tm.musicid
+     JOIN tag t
+         ON t.tagID = tm.tagID
+ORDER BY date)
+WHERE ROWNUM <= 10 -- or how ever many rows we want
+#+END_SRC
+                               ** Creating a tag.

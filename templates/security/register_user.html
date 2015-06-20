@@ -1,0 +1,49 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}TrackTag{% endblock %}
+{% block navbar %}
+{% block styles %}
+{{super()}}
+{% endblock %}
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle"
+              data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span> 
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">TrackTag</a> </div>
+    <div class="navbar-collapse collapse"> <ul class="nav navbar-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/popular">Popular</a></li>
+      <li><a href="/users">Users</a></li>
+      {% if current_user.is_authenticated() %}
+      <li><a href="/user/{{ current_user.id }}">Profile</a></li>
+      <li><a href="{{ url_for('security.logout') }}">Logout</a></li></ul>
+      {% else %}
+      <li><a href="{{ url_for('security.login') }}">Login</a></li></ul>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>Register</h1>
+  </div>
+  <form action="{{ url_for('security.register') }}" method="POST" name="register_user_form">
+    {{ register_user_form.hidden_tag() }}
+    {{ wtf.form_errors(register_user_form) }}
+    {{ wtf.form_field(register_user_form.email) }}
+    {{ wtf.form_field(register_user_form.id) }}
+    {{ wtf.form_field(register_user_form.password) }}
+    {{ wtf.form_field(register_user_form.password_confirm) }}
+    {{ wtf.form_field(register_user_form.submit) }}
+  </form>
+</div>
+{% endblock %}

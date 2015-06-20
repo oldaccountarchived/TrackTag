@@ -1,0 +1,46 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}TrackTag{% endblock %}
+{% block navbar %}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('.static', filename='stylesheets/navform.css') }}">
+{% endblock %}
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle"
+              data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span> 
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">TrackTag</a> </div>
+    <div class="navbar-collapse collapse"> <ul class="nav navbar-nav">
+      <li><a href="/">Home</a></li>
+      <li><a href="/popular">Popular</a></li>
+      <li><a href="/users">Users</a></li>
+      {% if current_user.is_authenticated() %}
+      <li><a href="/user/{{ current_user.id }}">Profile</a></li>
+      <li><a href="{{ url_for('security.logout') }}">Logout</a></li></ul>
+      {% else %}
+      <li><a href="{{ url_for('security.login') }}">Login</a></li></ul>
+      {% endif %}
+      {{ wtf.quick_form(form, action="", method="post", extra_classes="navbar-search pull-right", role="form", form_type="inline", enctype=None, button_map={}, id="")}}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="page-header">
+		<h1>Tags</h1>
+	</div>
+    
+    {% for tag in tag_result %}
+    <h4> <a href="/tag/{{ tag.name }}"> <span class="label label-default">{{ tag.name }}</span></a> </h4>
+    {% endfor %}
+    
+</div>
+{% endblock %}
